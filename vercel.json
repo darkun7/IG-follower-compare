@@ -1,18 +1,13 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "client/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    },
-    {
-      "src": "api/index.ts",
-      "use": "@vercel/node"
+  "installCommand": "npm install",
+  "buildCommand": "npm run build",
+  "outputDirectory": "client/dist",
+  "framework": "vite",
+  "functions": {
+    "api/index.ts": {
+      "includeFiles": "server/**"
     }
-  ],
+  },
   "routes": [
     {
       "src": "/api/(.*)",
@@ -23,18 +18,16 @@
       "dest": "/api/index.ts"
     },
     {
-      "src": "/(.*\\.[a-z]+)",
+      "src": "/assets/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    },
+    {
+      "src": "/(.*\\.(js|css|png|ico|svg|jpg|jpeg|gif|woff|woff2|ttf|eot))",
       "dest": "/client/dist/$1"
     },
     {
       "src": "/(.*)",
       "dest": "/client/dist/index.html"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/(.*\\.(js|css|woff2?))",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
     }
   ]
 }
