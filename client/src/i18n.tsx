@@ -164,16 +164,25 @@ function interpolate(
   );
 }
 
+function getInitialLang(): Lang {
+  // 1. Check URL query param ?lang=
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const queryLang = params.get('lang');
+    if (queryLang === 'en' || queryLang === 'id') return queryLang;
+  } catch { /* ignore */ }
+
+  // 2. Check localStorage
+  try {
+    const stored = localStorage.getItem(LANG_STORAGE_KEY);
+    if (stored === 'en' || stored === 'id') return stored;
+  } catch { /* ignore */ }
+
+  return 'id';
+}
+
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>(() => {
-    try {
-      const stored = localStorage.getItem(LANG_STORAGE_KEY);
-      if (stored === 'en' || stored === 'id') return stored;
-    } catch {
-      /* ignore */
-    }
-    return 'id';
-  });
+  const [lang, setLangState] = useState<Lang>(getInitialLang);
 
   useEffect(() => {
     try {
