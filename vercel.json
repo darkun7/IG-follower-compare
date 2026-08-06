@@ -2,26 +2,15 @@
   "installCommand": "npm install",
   "buildCommand": "npm run build",
   "outputDirectory": "client/dist",
-  "cleanUrls": true,
-  "trailingSlash": false,
   "functions": {
     "api/index.ts": {
       "includeFiles": "server/**"
     }
   },
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/index.ts"
-    },
-    {
-      "src": "/health(?:\\?.*)?$",
-      "dest": "/api/index.ts"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/client/dist/index.html"
-    }
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index.ts" },
+    { "source": "/health", "destination": "/api/index.ts" },
+    { "source": "/((?!assets/).*)", "destination": "/index.html" }
   ],
   "headers": [
     {
