@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.env
+.env.local
+.DS_Store
+*.pyc
+__pycache__/
+.Python
+server/.venv/
+.client/.vercel/
+
+# Instagram test data
+followers_1.json
+following.json
