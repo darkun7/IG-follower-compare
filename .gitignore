@@ -12,3 +12,5 @@ server/.venv/
 # Instagram test data
 followers_1.json
 following.json
+
+.vercel

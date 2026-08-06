@@ -1,10 +1,12 @@
 import React, { useState, useCallback } from 'react';
+import { Routes, Route, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { compareFiles } from './api';
 import { useI18n } from './i18n';
 import { useTheme } from './theme';
 import ResultsDisplay from './components/ResultsDisplay';
 import HowToGuide from './components/HowToGuide';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 
 type FileType = 'followers_export' | 'following_export' | 'csv' | 'unknown';
 
@@ -86,6 +88,27 @@ export default function App() {
     setResults(null);
   }, []);
 
+  return (
+    <Routes>
+      <Route path="/privacy" element={<PrivacyPolicy />} />
+      <Route path="*" element={<HomePage files={files} loading={loading} results={results} dragging={dragging} setDragging={setDragging} onFileChange={onFileChange} handleCompare={handleCompare} reset={reset} t={t} />} />
+    </Routes>
+  );
+}
+
+function HomePage({
+  files, loading, results, dragging, setDragging, onFileChange, handleCompare, reset, t,
+}: {
+  files: { followers: ParsedFile | null; following: ParsedFile | null };
+  loading: boolean;
+  results: any;
+  dragging: 'followers' | 'following' | null;
+  setDragging: React.Dispatch<React.SetStateAction<'followers' | 'following' | null>>;
+  onFileChange: (side: 'followers' | 'following', file: File) => void;
+  handleCompare: () => void;
+  reset: () => void;
+  t: (key: any, params?: Record<string, string | number>) => string;
+}) {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
       {/* Header */}
@@ -186,9 +209,12 @@ export default function App() {
 
       {/* Footer */}
       <footer className="border-t border-gray-200 dark:border-white/5 py-8 text-center">
-        <p className="text-gray-400 dark:text-gray-600 text-sm">
+        <p className="text-gray-400 dark:text-gray-600 text-sm mb-2">
           {t('footer.text')}
         </p>
+        <Link to="/privacy" className="text-gray-400 dark:text-gray-500 hover:text-emerald-500 dark:hover:text-emerald-400 text-sm transition-colors">
+          Privacy Policy
+        </Link>
       </footer>
     </div>
   );
